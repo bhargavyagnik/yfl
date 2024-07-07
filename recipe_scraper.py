@@ -4,53 +4,33 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from api_keys import DEVELOPER_KEY
 
-
+ctr = 0
 # Channel ID of the target channel
-CHANNEL_ID = "UCs7S6t3r0u5wM9d6j5D7hIA"
+CHANNEL_ID = "UCe2JAC5FUfbxLCfAvBWmNJA"
 
-MAX_WORKERS = 10
-
-# Function to extract captions from a video
-def get_captions(video_id):
-  youtube = build('youtube', 'v3', developerKey=DEVELOPER_KEY)
-  try:
-    # Request captions information
-    request = youtube.captions().list(part="snippet", videoId=video_id)
-    response = request.execute()
-
-    # Extract captions details if available
-    if len(response['items']) > 0:
-      caption_lang = response['items'][0]['snippet']['language']
-      caption_url = f"https://www.youtube.com/api/timedtext?lang={caption_lang}&v={video_id}"
-      return caption_url
-    else:
-      return None
-  except HttpError as e:
-    print(f"Error retrieving captions for video {video_id}: {e}")
-    return None
+MAX_WORKERS = 1
 
 # Function to process video data and write to CSV
 def process_video(video_data):
   video_id = video_data['id']['videoId']
   title = video_data['snippet']['title']
   url = f"https://www.youtube.com/watch?v={video_id}"
-
-  # Get captions using get_captions function
-  caption_url = get_captions(video_id)
+  description = video_data['snippet'].get('description', '')  # Handle missing descriptions
 
   # Write data to CSV row
-  with open("captions.csv", "a", encoding="utf-8") as csvfile:
-    csvfile.write(f"{title},{url},{caption_url}\n")
+  with open("channel_data.csv", "a", encoding="utf-8") as csvfile:
+    csvfile.write(f"{title},{url},{description}\n")
 
 # Function to get video list from a YouTube channel
 def get_channel_videos(channel_id, page_token=None):
+  global ctr
   youtube = build('youtube', 'v3', developerKey=DEVELOPER_KEY)
 
   # Request video list for the channel
   request = youtube.search().list(
       part="snippet",
       channelId=channel_id,
-      maxResults=5,
+      maxResults=50,
       type="video",
       order="date",
       pageToken=page_token
@@ -67,6 +47,8 @@ def get_channel_videos(channel_id, page_token=None):
   # Check for next page token and call recursively if available
   next_page_token = response.get("nextPageToken", None)
   if next_page_token:
+    ctr+=50
+    print(ctr)
     get_channel_videos(channel_id, next_page_token)
 
 # Main function to orchestrate the process
