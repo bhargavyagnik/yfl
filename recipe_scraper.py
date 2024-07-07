@@ -1,5 +1,4 @@
 import os
-import concurrent.futures
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from api_keys import DEVELOPER_KEY
@@ -7,8 +6,6 @@ from api_keys import DEVELOPER_KEY
 ctr = 0
 # Channel ID of the target channel
 CHANNEL_ID = "UCe2JAC5FUfbxLCfAvBWmNJA"
-
-MAX_WORKERS = 1
 
 # Function to process video data and write to CSV
 def process_video(video_data):
@@ -54,13 +51,12 @@ def get_channel_videos(channel_id, page_token=None):
 # Main function to orchestrate the process
 def main():
   # Check if CSV file exists and create it if not
+  get_channel_videos(CHANNEL_ID)
   if not os.path.exists("captions.csv"):
     with open("captions.csv", "w", encoding="utf-8") as csvfile:
       csvfile.write("title,url,caption_url\n")
 
-  # Use concurrent.futures to parallelize video processing
-  with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-    get_channel_videos(CHANNEL_ID)
+  get_channel_videos(CHANNEL_ID)
 
 if __name__ == "__main__":
   main()
