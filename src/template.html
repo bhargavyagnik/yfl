@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Finder</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        #ingredientsList { margin-bottom: 10px; }
+        #results { margin-top: 20px; }
+        .recipe { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Recipe Finder</h1>
+    <div>
+        <input type="text" id="ingredient" placeholder="Enter an ingredient">
+        <button onclick="addIngredient()">Add Ingredient</button>
+    </div>
+    <div id="ingredientsList"></div>
+    <button onclick="findRecipes()">Find Recipes</button>
+    <div id="results"></div>
+
+    <script>
+        let ingredients = [];
+
+        function addIngredient() {
+            const ingredient = document.getElementById('ingredient').value.trim();
+            if (ingredient && !ingredients.includes(ingredient)) {
+                ingredients.push(ingredient);
+                updateIngredientsList();
+                document.getElementById('ingredient').value = '';
+            }
+        }
+
+        function updateIngredientsList() {
+            document.getElementById('ingredientsList').innerHTML = ingredients.map(ing => `<span>${ing}</span>`).join(', ');
+        }
+
+        function findRecipes() {
+            axios.post('/find_recipes', { ingredients: ingredients })
+                .then(function (response) {
+                    const results = response.data;
+                    let htmlContent = '';
+                    for (let recipe of results) {
+                        htmlContent += `
+                            <div class="recipe">
+                                <h3>${recipe.name}</h3>
+                                <p>Ingredients: ${recipe.ingredients}</p>
+                                <a href="${recipe.youtube_link}" target="_blank">Watch on YouTube</a>
+                            </div>
+                        `;
+                    }
+                    document.getElementById('results').innerHTML = htmlContent;
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
