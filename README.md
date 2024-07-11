@@ -5,6 +5,6 @@ The recipes are from my favourite youtuber Sanjyot Keer who goes popularly by th
 
 ## Current status
 Dataset - Obtained via Youtube (Title, URL, and Recipes)
-Data pre-processing - This work is in progress. Looking for an efficient LLM parser. Currently working with Ollama, Lanchain and LLAMA3 combination. The parser is still buggy but working on quick structuring. Hopefully will solve it out soon.
+Data pre-processing - This work is in progress. Looking for an efficient LLM parser. Currently working with Ollama, Lanchain and LLAMA3 combination. The parser is still buggy but working on quick structuring. Hopefully will solve it out soon. Working out now with Phi3 to compare 8B vs 2B params performance of this dataset.
 Application - Planning on a Flask based  (skeleton ready) frontend and a backend provided by API and hopefully a vector database to find recipes based on the ingredents you have at home or probably mood that you are looking for based on countries.
 
