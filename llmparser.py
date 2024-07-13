@@ -86,11 +86,13 @@ def main():
         for col in new_cols:
             data[col] = None
     for i,row in  tqdm(data.iterrows(),total=len(data)):
-        if data.at[i,new_cols[0]] is None:
+        if pd.isna(row[new_cols[:2]]).any():
             x = extract_recipe_info(row["description"])
             for j, col in enumerate(new_cols):
                 data.at[i,col] = x[j]
-        if i>0 and i%25 == 0:
+        else:
+            print(f"Skipping row {i} as it already has values")
+        if i>0 and i%100 == 0:
             save_files(data)
 
     outputpath = save_files(data)
