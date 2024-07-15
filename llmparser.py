@@ -69,17 +69,17 @@ def handle_apply_error(error):
     return None  # Or return a default value
 
 def save_files(data):
-    opath = 'channel_data_parsed_g.csv'
+    opath = 'data/channel_data_parsed_g.csv'
     outputpath = os.path.join(os.path.dirname(__file__), opath)
     data.to_csv(outputpath, index=False)
 
-    opath_1 = 'channel_data_parsed.csv'
+    opath_1 = 'data/channel_data_parsed.csv'
     outputpath1 = os.path.join(os.path.dirname(__file__), opath_1)
     data[new_cols].to_csv(outputpath1, index=False)
     return outputpath
 
 def main():
-    file_path = os.path.join(os.path.dirname(__file__), 'channel_data_parsed_g.csv')
+    file_path = os.path.join(os.path.dirname(__file__), 'data/channel_data_parsed_g.csv')
     data = pd.read_csv(file_path)
     data[['description']] = data[['description']].fillna('')
     if new_cols[0] not in data.columns:
