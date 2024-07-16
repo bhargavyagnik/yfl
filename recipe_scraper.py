@@ -51,7 +51,7 @@ def get_channel_videos(api_key, channel_id):
         print(f'An HTTP error {e.resp.status} occurred:\n{e.content}')
         return None
 
-def save_to_csv(videos, filename='channel_data.csv'):
+def save_to_csv(videos, filename='data/channel_data.csv'):
     with open(filename, 'w', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=['title', 'description', 'url'])
         writer.writeheader()
@@ -64,7 +64,7 @@ def main():
     
     if videos:
         save_to_csv(videos)
-        print(f"Saved data for {len(videos)} videos to channel_data.csv")
+        print(f"Saved data for {len(videos)} videos to data/channel_data.csv")
     else:
         print("No videos were fetched. Check your API key and channel ID.")
 
