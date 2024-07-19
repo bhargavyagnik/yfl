@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Basic Search App</title>
+</head>
+<body>
+  <h1>Search</h1>
+  <form method="POST">
+    <label for="search">Search Term:</label>
+    <input type="text" id="search" name="search" value="{{ search_query }}">
+    <button type="submit">Search</button>
+  </form>
+
+  {% if search_query %}
+    <p>You searched for: {{ search_query }}</p>
+  {% endif %}
+</body>
+</html>
