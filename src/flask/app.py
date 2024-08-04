@@ -4,7 +4,7 @@ from elasticsearch import Elasticsearch
 
 app = Flask(__name__)
 es = Elasticsearch(hosts=[{'host': 'elasticsearch', 'port': 9200}])
-
+#ToDo : Elasticsearch docker container should be running before running this script
 # Load CSV data into Elasticsearch
 df = pd.read_csv('data/recipes.csv')
 for index, row in df.iterrows():
